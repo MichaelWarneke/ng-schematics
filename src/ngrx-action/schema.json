@@ -33,6 +33,22 @@
       "default": false,
       "description": "Group actions file within 'actions' folder",
       "aliases": ["g"]
+    },
+    "groupName": {
+      "type": "string",
+      "default": "Sample",
+      "description": "Name of the action group",
+      "aliases": ["gn"]
+    },
+    "payload": {
+      "type": "string",
+      "description": "Name of payload",
+      "aliases": ["p"]
+    },
+    "payloadType": {
+      "type": "string",
+      "description": "Type of payload",
+      "aliases": ["pt"]
     }
   },
   "required": [
