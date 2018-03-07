@@ -1,0 +1,22 @@
+{
+    "name": "@tmp/schematics",
+    "version": "0.0.1",
+    "description": "Schematics for Angular",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/MichaelWarneke/ng-schematics.git"
+    },
+    "keywords": [
+      "RxJS",
+      "Angular",
+      "Redux",
+      "NgRx",
+      "Schematics",
+      "Angular CLI"
+    ],
+    "author": "Michael Warneke <michael.warneke@outlook.com.au>",
+    "license": "MIT",
+    "homepage": "https://github.com/MichaelWarneke/ng-schematics#readme",
+    "schematics": "./collection.json"
+  }
+  
