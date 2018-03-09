@@ -1,4 +1,4 @@
-import { Rule, SchematicsException, apply, url, noop, filter, template, move, chain, mergeWith, branchAndMerge, MergeStrategy } from '@angular-devkit/schematics';
+import { Rule, SchematicsException, apply, url, noop, filter, template, move, chain, mergeWith, branchAndMerge } from '@angular-devkit/schematics';
 import { normalize } from '@angular-devkit/core';
 import { Schema } from './schema';
 
