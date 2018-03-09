@@ -28,6 +28,10 @@ export default function(options: Schema): Rule {
     throw new SchematicsException(`sourceDir option is required.`);
   } 
 
+  if(options.payload && !options.payloadType) {
+    throw new SchematicsException(`payloadType is required if payload is set.`);
+  }
+
   return chain([
     (_tree: Tree, context: SchematicContext) => {
       // Show the options for this Schematics.
