@@ -5,12 +5,12 @@ export enum <%= classify(groupName) %>ActionType {
 }
 
 export interface <%= classify(name) %>Action extends Action {
-  type: <%= classify(groupName) %>ActionType.<%= capitalizeAll(underscore(name)) %>_ACTION;
-  <% if (payload) { %><%= payload %>: <%= payloadType %><% } %>
+  type: <%= classify(groupName) %>ActionType.<%= capitalizeAll(underscore(name)) %>_ACTION;<% if (payload) { %>
+  <%= payload %>: <%= payloadType %>;<% } %>
 }
 
 export type <%= classify(groupName) %>Actions = <%= classify(name) %>Action;
 
-export function create<%= classify(name) %>Action(<%= payload %>: <%= classify(name) %>Action['<%= payload %>']): <%= classify(name) %>Action {
-  return { type: <%= classify(groupName) %>ActionType.<%= capitalizeAll(underscore(name)) %>_ACTION, <%= payload %> };
+export function create<%= classify(name) %>Action(<% if (payload) { %><%= payload %>: <%= classify(name) %>Action['<%= payload %>']<% } %>): <%= classify(name) %>Action {
+  return { type: <%= classify(groupName) %>ActionType.<%= capitalizeAll(underscore(name)) %>_ACTION<% if (payload) { %>, <%= payload %><% } %> };
 }

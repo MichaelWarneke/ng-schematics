@@ -17,6 +17,10 @@
     "author": "Michael Warneke <michael.warneke@outlook.com.au>",
     "license": "MIT",
     "homepage": "https://github.com/MichaelWarneke/ng-schematics#readme",
-    "schematics": "./collection.json"
+    "schematics": "./collection.json",
+    "dependencies": {
+      "@ngrx/schematics": "^5.2.0",
+      "@nrwl/schematics": "^0.8.0"
+    }
   }
   

@@ -4,8 +4,7 @@
   "description": "A blank schematics",
   "scripts": {
     "build": "./scripts/build.sh",
-    "test": "npm run build && jasmine **/*_spec.js",
-    "postinstall": "./scripts/post_install.sh"
+    "test": "npm run build && jasmine **/*_spec.js"
   },
   "keywords": [
     "schematics"
@@ -17,6 +16,8 @@
     "@angular-devkit/core": "^0.4.3",
     "@angular-devkit/schematics": "^0.4.3",
     "@schematics/angular": "^0.4.3",
+    "@ngrx/schematics": "^5.2.0",
+    "@nrwl/schematics": "^0.8.0",
     "@types/jasmine": "^2.6.0",
     "@types/node": "^8.0.31",
     "jasmine": "^2.8.0",

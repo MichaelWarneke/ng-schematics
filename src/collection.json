@@ -1,9 +1,9 @@
 {
-  "extends": ["@tmp/ngrx/schematics", "@tmp/nrwl/schematics"],
+  "extends": ["@schematics/angular","@ngrx/schematics", "@nrwl/schematics"],
   "schematics": {
     "ngrx-action": {
-      "aliases": [ "a" ],
-      "description": "An ngrx action.",
+      "aliases": [ "ngrx-a" ],
+      "description": "A custom ngrx action.",
       "factory": "./ngrx-action",
       "schema": "./ngrx-action/schema.json"
     }
