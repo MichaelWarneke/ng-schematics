@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsNgRxAction",
-  "title": "NgRx Action Options Schema",
+  "id": "NgSchematicsNgRxAction",
+  "title": "ng-schematics NGRX Action Options Schema",
   "type": "object",
   "properties": {
     "name": {
@@ -15,6 +15,7 @@
       "default": "app"
     },
     "sourceDir": {
+      "format": "path",
       "type": "string",
       "default": "src"
     },
@@ -25,7 +26,7 @@
     },
     "flat": {
       "type": "boolean",
-      "default": true,
+      "default": false,
       "description": "Flag to indicate if a dir is created."
     },
     "group": {
@@ -36,7 +37,7 @@
     },
     "groupName": {
       "type": "string",
-      "default": "Sample",
+      "default": "groupName",
       "description": "Name of the action group",
       "aliases": ["gn"]
     },

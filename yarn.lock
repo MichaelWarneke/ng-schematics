@@ -2,18 +2,18 @@
 # yarn lockfile v1
 
 
-"@angular-devkit/core@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-0.4.3.tgz#a60d31d5d38a765d256d28e9fb2415cee2733a64"
+"@angular-devkit/core@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-0.4.5.tgz#da081d63c702c85be2b872d14cd2c59e49915573"
   dependencies:
     ajv "~5.5.1"
     chokidar "^1.7.0"
     rxjs "^5.5.6"
     source-map "^0.5.6"
 
-"@angular-devkit/schematics@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-0.4.3.tgz#dc3ff093d51a1739dd0ce847689f2a9269d9e06a"
+"@angular-devkit/schematics@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-0.4.5.tgz#0b7a2828d4e53e4342cca68ffb61e04f333250ba"
   dependencies:
     "@ngtools/json-schema" "^1.1.0"
     rxjs "^5.5.6"
@@ -34,9 +34,9 @@
     semver "5.4.1"
     tmp "0.0.33"
 
-"@schematics/angular@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-0.4.3.tgz#9eabacec591c8300538b1a0843dda60dd4de5a10"
+"@schematics/angular@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-0.4.5.tgz#b77f33aee4a384072e4277a4e2bfb5ea899f1e03"
   dependencies:
     typescript "~2.6.2"
 
