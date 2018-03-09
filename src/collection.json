@@ -6,6 +6,12 @@
       "description": "A custom ngrx action.",
       "factory": "./ngrx-action",
       "schema": "./ngrx-action/schema.json"
+    },
+    "ngrx-add-action": {
+      "aliases": [ "ngrx-add-a" ],
+      "description": "Add custom ngrx action to action file.",
+      "factory": "./ngrx-add-action",
+      "schema": "./ngrx-add-action/schema.json"
     }
   }
 }
