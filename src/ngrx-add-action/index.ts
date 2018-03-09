@@ -2,7 +2,7 @@ import { Rule, SchematicsException, chain, Tree, SchematicContext, branchAndMerg
 import { normalize } from '@angular-devkit/core';
 import { Schema } from './schema';
 
-import { getSourceNodes, InsertChange, Change, NoopChange } from '../utils/otherUtils';
+import { InsertChange, Change, NoopChange } from '../utils/otherUtils';
 
 import * as ts from 'typescript';
 import { stringUtils, capitalizeAll } from '../utils/stringUtils';
@@ -61,16 +61,14 @@ export function addActionToActionFile(options: Schema): Rule {
       actionFilePath.indexOf('.actions.ts')
     )
 
-    let nodes = getSourceNodes(sourceFile);
-
     const actionTypesChange: Change = addActionToActionTypes(
-      nodes,
+      sourceFile,
       actionFilePath, 
       options.name,
       groupName
     );
     const actionInterfaceChange: Change = addActionInterface(
-      nodes,
+      sourceFile,
       actionFilePath, 
       options.name, 
       groupName,
@@ -78,13 +76,13 @@ export function addActionToActionFile(options: Schema): Rule {
       options.payloadType
     );
     const actionTypeChange: Change = addActionType(
-      nodes,
+      sourceFile,
       actionFilePath, 
       options.name,
       groupName
     );
     const actionCreatorChange: Change = addActionCreator(
-      nodes,
+      sourceFile,
       actionFilePath, 
       options.name, 
       groupName,
@@ -106,19 +104,19 @@ export function addActionToActionFile(options: Schema): Rule {
 }
 
 export function addActionToActionTypes(
-  nodes: ts.Node[],
+  source: ts.SourceFile,
   actionFilePath: string,
   name: string,
   groupName: string
 ): Change {
-  let ctorNode = nodes.find(n => n.kind == ts.SyntaxKind.EnumMember);
-
+  const ctorNode = source.statements.find(
+    stm => stm.kind === ts.SyntaxKind.EnumDeclaration
+  );
   let node = ctorNode as ts.Statement;
 
   if (!node) {
     return new NoopChange();
   }
-  
 
   const declaration = capitalizeAll(stringUtils.underscore(name)) + '_ACTION';
   const value = '\'[' + stringUtils.classify(groupName) + '] ' + stringUtils.classify(name) + '\''
@@ -126,13 +124,13 @@ export function addActionToActionTypes(
 
   let position;
   let toInsert : string = newEnum;
-  position = node.getEnd();
+  position = node.getEnd()-2;
 
   return new InsertChange(actionFilePath, position, toInsert);
 }
 
 export function addActionInterface(
-  nodes: ts.Node[],
+  source: ts.SourceFile,
   actionFilePath: string,
   name: string,
   groupName: string,
@@ -140,9 +138,10 @@ export function addActionInterface(
   payloadType?: string
 ): Change {
 
-  let ctorNode = nodes.find(n => n.kind == ts.SyntaxKind.InterfaceDeclaration);
-
-  let node = ctorNode as ts.Statement;
+  const ctorNode = source.statements.filter(
+    stm => stm.kind === ts.SyntaxKind.InterfaceDeclaration
+  );
+  let node = ctorNode.pop() as ts.Statement;
 
   if (!node) {
     return new NoopChange();
@@ -164,14 +163,15 @@ export function addActionInterface(
 }
 
 export function addActionType(
-  nodes: ts.Node[],
+  source: ts.SourceFile,
   actionFilePath: string,
   name: string,
   groupName: string,
 ): Change {
 
-  let ctorNode = nodes.find(n => n.kind == ts.SyntaxKind.TypeAliasDeclaration);
-
+  const ctorNode = source.statements.find(
+    stm => stm.kind === ts.SyntaxKind.TypeAliasDeclaration
+  );
   let node = ctorNode as ts.Statement;
 
   if (!node) {
@@ -189,22 +189,26 @@ export function addActionType(
 }
 
 export function addActionCreator(
-  nodes: ts.Node[],
+  source: ts.SourceFile,
   actionFilePath: string,
   name: string,
   groupName: string,
   payload?: string,
 ): Change {
 
-  let ctorNode = nodes.find(n => n.kind == ts.SyntaxKind.FunctionDeclaration);
-
-  let node = ctorNode as ts.Statement;
+  const ctorNode = source.statements.filter(
+    stm => stm.kind === ts.SyntaxKind.FunctionDeclaration
+  );
+  let node = ctorNode.pop() as ts.Statement;
 
   if (!node) {
     return new NoopChange();
   }
 
-  let plDecl, plSet = '';
+  console.log("Node :", node.getFullText());
+
+  let plDecl = '';
+  let plSet = '';
   if(payload) {
     plDecl = `${payload}: ${stringUtils.classify(name)}Action['${payload}']`;
     plSet = `, ${payload}`
