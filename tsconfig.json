@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
+    "baseUrl": ".",
+    "declaration": true,
     "lib": [
       "es2017",
       "dom"
@@ -13,21 +14,29 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "rootDir": "src/",
+    "rootDir": "src",
+    "outDir": "build",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strictNullChecks": true,
-    "target": "es6",
+    "strict": true,
+    "target": "es5",
     "types": [
       "jasmine",
       "node"
     ]
   },
-  "include": [
-    "src/**/*"
+
+  "files": [
+    "src/ngrx-action/index.ts",
+    "src/ngrx-add-action/index.ts"
   ],
+
   "exclude": [
     "src/*/files/**/*"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": true,
+    "enableSummariesForJit": false
+  }
 }

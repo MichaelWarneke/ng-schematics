@@ -9,14 +9,14 @@ import { stringUtils, capitalizeAll } from '../utils/stringUtils';
 
 export default function(options: Schema): Rule {
 
-  options.path = options.path ? normalize(options.path) : options.path;
-  const sourceDir = options.sourceDir;
-  if (!sourceDir) {
-    throw new SchematicsException(`sourceDir option is required.`);
-  } 
+  options.actionPath = options.actionPath.length > 1 ? normalize(options.actionPath) : options.actionPath;
 
   if(options.payload && !options.payloadType) {
     throw new SchematicsException(`payloadType is required if payload is set.`);
+  }
+
+  if(!options.actionPath) {
+    throw new SchematicsException(`Please specify actionPath variable to the action file.`); 
   }
 
   return chain([
@@ -35,7 +35,7 @@ export default function(options: Schema): Rule {
 
 export function addActionToActionFile(options: Schema): Rule {
   return (host: Tree) => {
-    let actionFilePath = options.path;
+    let actionFilePath = options.actionPath;
 
     if(!actionFilePath) {
       throw new SchematicsException(`Please specify path variable to the action file.`); 
@@ -204,8 +204,6 @@ export function addActionCreator(
   if (!node) {
     return new NoopChange();
   }
-
-  console.log("Node :", node.getFullText());
 
   let plDecl = '';
   let plSet = '';

@@ -1,28 +1,20 @@
-# Getting Started With Schematics
+# NG-Schematics
 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+This is a project for testing different angular schematic scenarios
 
-### Testing
+It merges the ngrx and nrwl schematics and adds custom schematics.
 
-To test locally, install `@angular-devkit/schematics` globally and use the `schematics` command line tool. That tool acts the same as the `generate` command of the Angular CLI, but also has a debug mode.
+At the moment the custom schematics consist of
 
-Check the documentation with
-```bash
-schematics --help
-```
+# ngrx-action
 
-### Unit Testing
+Creates an action file with actions declared as interfaces and the usage of action creator functions.
+This is the way the ngrx codegen produced actions.
 
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
+ng g ngrx-action LoadBooks --groupName=Books
 
-### Publishing
+# ngrx-add-action
 
-To publish, simply do:
+Adds an action to the specified action file by craetung the type, interface and creator function.
 
-```bash
-npm run build
-npm publish
-```
-
-That's it!
- 
+ng g ngrx-add-action SaveBooks --actionPath=<path to action file> --payload=book --payloadType=Book

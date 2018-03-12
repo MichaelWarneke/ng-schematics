@@ -1,5 +1,5 @@
 {
-    "name": "@tmp/schematics",
+    "name": "@michael.warneke/ng-schematics",
     "version": "0.0.1",
     "description": "Schematics for Angular",
     "repository": {
@@ -18,7 +18,8 @@
     "license": "MIT",
     "homepage": "https://github.com/MichaelWarneke/ng-schematics#readme",
     "schematics": "./collection.json",
-    "dependencies": {
+    "private": false,
+    "peerDependencies": {
       "@ngrx/schematics": "^5.2.0",
       "@nrwl/schematics": "^0.8.0"
     }

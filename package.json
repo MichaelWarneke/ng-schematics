@@ -1,6 +1,6 @@
 {
-  "name": "ng-schematics",
-  "version": "0.0.0",
+  "name": "@michael.warneke/ng-schematics",
+  "version": "0.0.1",
   "description": "A blank schematics",
   "scripts": {
     "build": "./scripts/build.sh",
@@ -12,12 +12,13 @@
   "author": "",
   "license": "MIT",
   "schematics": "./src/collection.json",
+  "private": false,
   "devDependencies": {
     "@angular-devkit/core": "^0.4.5",
     "@angular-devkit/schematics": "^0.4.5",
-    "@schematics/angular": "^0.4.5",
     "@ngrx/schematics": "^5.2.0",
     "@nrwl/schematics": "^0.8.0",
+    "@schematics/angular": "^0.4.5",
     "@types/jasmine": "^2.6.0",
     "@types/node": "^8.0.31",
     "jasmine": "^2.8.0",

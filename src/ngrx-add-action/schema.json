@@ -7,17 +7,6 @@
     "name": {
       "type": "string"
     },
-    "appRoot": {
-      "type": "string"
-    },
-    "path": {
-      "type": "string",
-      "default": "app"
-    },
-    "sourceDir": {
-      "type": "string",
-      "default": "src"
-    },
     "actionPath": {
       "type": "string"
     },
