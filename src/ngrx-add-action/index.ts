@@ -9,8 +9,6 @@ import { stringUtils, capitalizeAll } from '../utils/stringUtils';
 
 export default function(options: Schema): Rule {
 
-  options.actionPath = options.actionPath.length > 1 ? normalize(options.actionPath) : options.actionPath;
-
   if(options.payload && !options.payloadType) {
     throw new SchematicsException(`payloadType is required if payload is set.`);
   }
@@ -18,6 +16,8 @@ export default function(options: Schema): Rule {
   if(!options.actionPath) {
     throw new SchematicsException(`Please specify actionPath variable to the action file.`); 
   }
+
+  options.actionPath = options.actionPath.length > 1 ? normalize(options.actionPath) : options.actionPath;
 
   return chain([
     (_host: Tree, context: SchematicContext) => {
@@ -61,7 +61,7 @@ export function addActionToActionFile(options: Schema): Rule {
       actionFilePath.indexOf('.actions.ts')
     )
 
-    const actionTypesChange: Change = addActionToActionTypes(
+    const actionTypesChange: Change = addActionConst(
       sourceFile,
       actionFilePath, 
       options.name,
@@ -71,7 +71,6 @@ export function addActionToActionFile(options: Schema): Rule {
       sourceFile,
       actionFilePath, 
       options.name, 
-      groupName,
       options.payload,
       options.payloadType
     );
@@ -85,7 +84,6 @@ export function addActionToActionFile(options: Schema): Rule {
       sourceFile,
       actionFilePath, 
       options.name, 
-      groupName,
       options.payload
     );
 
@@ -103,6 +101,35 @@ export function addActionToActionFile(options: Schema): Rule {
   }
 }
 
+export function addActionConst(
+  source: ts.SourceFile,
+  actionFilePath: string,
+  name: string,
+  groupName: string
+): Change {
+  const ctorNode = source.statements.filter(
+    stm => stm.kind === ts.SyntaxKind.VariableStatement
+  );
+  let node = ctorNode.pop() as ts.Statement;
+
+  if (!node) {
+    console.log("No const added");
+    return new NoopChange();
+  }
+
+  const declaration = capitalizeAll(stringUtils.underscore(name)) + '_ACTION';
+  const value = '\'[' + stringUtils.classify(groupName) + '] ' + stringUtils.classify(name) + '\';'
+  const newEnum = '\nexport const ' + declaration + ' = ' + value;
+
+  let position;
+  let toInsert : string = newEnum;
+  position = node.getEnd();
+
+  return new InsertChange(actionFilePath, position, toInsert);
+}
+
+
+// Old uses enum
 export function addActionToActionTypes(
   source: ts.SourceFile,
   actionFilePath: string,
@@ -120,7 +147,7 @@ export function addActionToActionTypes(
 
   const declaration = capitalizeAll(stringUtils.underscore(name)) + '_ACTION';
   const value = '\'[' + stringUtils.classify(groupName) + '] ' + stringUtils.classify(name) + '\''
-  const newEnum = ',\n\t' + declaration + ' = ' + value;
+  const newEnum = ',\n  ' + declaration + ' = ' + value;
 
   let position;
   let toInsert : string = newEnum;
@@ -130,6 +157,39 @@ export function addActionToActionTypes(
 }
 
 export function addActionInterface(
+  source: ts.SourceFile,
+  actionFilePath: string,
+  name: string,
+  payload?: string,
+  payloadType?: string
+): Change {
+
+  const ctorNode = source.statements.filter(
+    stm => stm.kind === ts.SyntaxKind.InterfaceDeclaration
+  );
+  let node = ctorNode.pop() as ts.Statement;
+
+  if (!node) {
+    return new NoopChange();
+  }
+
+  const declaration = `\n\nexport interface ${stringUtils.classify(name)}Action extends Action {\n`;
+  const type = `  type: typeof ${capitalizeAll(stringUtils.underscore(name))}_ACTION;\n`;
+  let payloadText = '';
+  if(payload) {
+    payloadText = `  ${payload}: ${payloadType};\n`;
+  }
+  const suffix = '}';
+
+  let position;
+  let toInsert : string = declaration + type + payloadText + suffix;
+  position = node.getEnd();
+
+  return new InsertChange(actionFilePath, position, toInsert);
+}
+
+// Old uses enum
+export function addActionInterfaceEnum(
   source: ts.SourceFile,
   actionFilePath: string,
   name: string,
@@ -148,10 +208,10 @@ export function addActionInterface(
   }
 
   const declaration = `\n\nexport interface ${stringUtils.classify(name)}Action extends Action {\n`;
-  const type = `\ttype: ${stringUtils.classify(groupName)}ActionTypes.${capitalizeAll(stringUtils.underscore(name))}_ACTION;\n`;
+  const type = `  type: ${stringUtils.classify(groupName)}ActionTypes.${capitalizeAll(stringUtils.underscore(name))}_ACTION;\n`;
   let payloadText = '';
   if(payload) {
-    payloadText = `\t${payload}: ${payloadType};\n`;
+    payloadText = `  ${payload}: ${payloadType};\n`;
   }
   const suffix = '}';
 
@@ -179,7 +239,7 @@ export function addActionType(
   }
   groupName;
 
-  const type = `\n\t| ${stringUtils.classify(name)}Action`;
+  const type = `\n  | ${stringUtils.classify(name)}Action`;
 
   let position;
   let toInsert : string = type;
@@ -189,6 +249,41 @@ export function addActionType(
 }
 
 export function addActionCreator(
+  source: ts.SourceFile,
+  actionFilePath: string,
+  name: string,
+  payload?: string,
+): Change {
+
+  const ctorNode = source.statements.filter(
+    stm => stm.kind === ts.SyntaxKind.FunctionDeclaration
+  );
+  let node = ctorNode.pop() as ts.Statement;
+
+  if (!node) {
+    return new NoopChange();
+  }
+
+  let plDecl = '';
+  let plSet = '';
+  if(payload) {
+    plDecl = `${payload}: ${stringUtils.classify(name)}Action['${payload}']`;
+    plSet = `, ${payload}`
+  }
+  
+  const declaration = `\n\nexport function create${stringUtils.classify(name)}Action(${plDecl}): ${stringUtils.classify(name)}Action {\n`;
+  const ret = `  return { type: ${capitalizeAll(stringUtils.underscore(name))}_ACTION${plSet} };\n`;
+  const suffix = '}';
+
+  let position;
+  let toInsert : string = declaration + ret + suffix;
+  position = node.getEnd();
+
+  return new InsertChange(actionFilePath, position, toInsert);
+}
+
+// Old uses enum
+export function addActionCreatorEnum(
   source: ts.SourceFile,
   actionFilePath: string,
   name: string,
@@ -213,7 +308,7 @@ export function addActionCreator(
   }
   
   const declaration = `\n\nexport function create${stringUtils.classify(name)}Action(${plDecl}): ${stringUtils.classify(name)}Action {\n`;
-  const ret = `\treturn { type: ${stringUtils.classify(groupName)}ActionTypes.${capitalizeAll(stringUtils.underscore(name))}_ACTION${plSet} };\n`;
+  const ret = `  return { type: ${stringUtils.classify(groupName)}ActionTypes.${capitalizeAll(stringUtils.underscore(name))}_ACTION${plSet} };\n`;
   const suffix = '}';
 
   let position;
@@ -222,4 +317,3 @@ export function addActionCreator(
 
   return new InsertChange(actionFilePath, position, toInsert);
 }
-

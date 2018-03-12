@@ -17,4 +17,4 @@ ng g ngrx-action LoadBooks --groupName=Books
 
 Adds an action to the specified action file by craetung the type, interface and creator function.
 
-ng g ngrx-add-action SaveBooks --actionPath=<path to action file> --payload=book --payloadType=Book
+ng g ngrx-add-action SaveBooks --actionPath="path to action file" --payload=book --payloadType=Book
